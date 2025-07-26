@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Enhanced eShop Modals</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 2rem;
+    }
+    .custom-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background-color: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 10px;
+      max-width: 600px;
+      width: 95%;
+      position: relative;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .close-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    .btn {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn-outline {
+      background: transparent;
+      color: #007bff;
+      border: 1px solid #007bff;
+    }
+    .btn-sm {
+      font-size: 0.8rem;
+      padding: 5px 10px;
+    }
+    h2 { margin-top: 0; color: #333; }
+
+    /* Wishlist and Cart Item styling */
+    .item-box {
+      display: flex;
+      align-items: center;
+      border: 1px solid #ddd;
+      padding: .5rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+    }
+    .item-box img {
+      width: 100px;
+      height: 100px;
+      margin-right: 1rem;
+    }
+    .item-details {
+      flex: 1;
+    }
+
+    /* Orders styling */
+    .orders-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .orders-table th, .orders-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      font-size: 14px;
+      text-align: left;
+    }
+    .orders-table th {
+      background-color: #f1f1f1;
+    }
+
+    /* Chat styling */
+    .chat-box {
+      border: 1px solid #ccc;
+      padding: 1rem;
+      border-radius: 6px;
+      margin-top: 1rem;
+      background: #f9f9f9;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .chat-msg {
+      margin-bottom: 0.5rem;
+    }
+    .chat-msg.admin { color: green; }
+    .chat-msg.user { color: blue; }
+    .notification {
+      font-size: 0.9rem;
+      color: red;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Wishlist Modal -->
+<div class="custom-modal" id="wishlistModal">
+  <div class="modal-content">
+    <button class="close-btn closeBtn">&times;</button>
+    <h2>Your Wishlist</h2>
+    <div id="wishlistContent" style="max-height: 300px; overflow-y: auto;"></div>
+  </div>
+</div>
+
+<!-- Orders Modal -->
+<div class="custom-modal" id="ordersModal">
+  <div class="modal-content">
+    <button class="close-btn closeBtn">&times;</button>
+    <h2>Your Orders</h2>
+    <table class="orders-table" id="ordersTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Details</th>
+          <th>Amount</th>
+          <th>Order Date</th>
+          <th>Delivery Date</th>
+          <th>Status</th>
+          <th>Remarks</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Chat Modal -->
+<div class="custom-modal" id="chatModal">
+  <div class="modal-content">
+    <button class="close-btn closeBtn">&times;</button>
+    <h2>Customer Care Chat</h2>
+    <input id="chatName" placeholder="Your Name" class="input">
+    <textarea id="chatMessage" placeholder="Type your message..." rows="3"></textarea>
+    <button id="chatSendBtn" class="btn">Send</button>
+    <div class="notification" id="chatNotification" style="display:none;">New admin reply or update!</div>
+    <div class="chat-box" id="chatBox"></div>
+  </div>
+</div>
+
+<script>
+  const queryParams = new URLSearchParams(window.location.search);
+  const modalToOpen = queryParams.get("modal");
+  if (modalToOpen) {
+    const modalElement = document.getElementById(`${modalToOpen}Modal`);
+    if (modalElement) {
+      modalElement.style.display = "flex";
+      if (modalToOpen === "wishlist") loadWishlist();
+      if (modalToOpen === "orders") loadOrders();
+      if (modalToOpen === "chat") loadChat();
+    }
+  }
+
+  document.querySelectorAll(".closeBtn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      btn.closest(".custom-modal").style.display = "none";
+    });
+  });
+
+  function loadWishlist() {
+    const container = document.getElementById("wishlistContent");
+    const list = JSON.parse(localStorage.getItem("wishlist")) || [];
+    container.innerHTML = list.length ? list.map(item => `
+      <div class="item-box">
+        <img src="${item.image || 'https://via.placeholder.com/100'}" alt="">
+        <div class="item-details">
+          <div><strong>${item.title}</strong></div>
+          <div>KES ${item.price}</div>
+          <button class="btn btn-outline btn-sm" onclick="removeFromWishlist(${item.id})">Remove</button>
+        </div>
+      </div>`).join("") : "<p>No wishlist items.</p>";
+  }
+
+  function removeFromWishlist(id) {
+    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    wishlist = wishlist.filter(item => item.id !== id);
+    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    loadWishlist();
+  }
+
+  function loadOrders() {
+    const tbody = document.querySelector("#ordersTable tbody");
+    const orders = JSON.parse(localStorage.getItem("orders")) || [];
+    tbody.innerHTML = orders.length ? orders.map((o, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${o.details}</td>
+        <td>KES ${o.amount}</td>
+        <td>${o.orderDate}</td>
+        <td>${o.deliveryDate}</td>
+        <td>${o.status}</td>
+        <td>${o.remarks}</td>
+      </tr>`).join("") : `<tr><td colspan="7">No orders found.</td></tr>`;
+  }
+
+  document.getElementById("chatSendBtn").addEventListener("click", () => {
+    const name = document.getElementById("chatName").value;
+    const msg = document.getElementById("chatMessage").value;
+    if (!name || !msg.trim()) return alert("Enter your name and message.");
+
+    let chatLog = JSON.parse(localStorage.getItem("chatLog")) || [];
+    chatLog.push({ sender: "user", name, message: msg, timestamp: new Date().toLocaleString() });
+    localStorage.setItem("chatLog", JSON.stringify(chatLog));
+    document.getElementById("chatMessage").value = "";
+    renderChat();
+  });
+
+  function loadChat() {
+    renderChat();
+    const hasAdminResponse = Math.random() < 0.5;
+    if (hasAdminResponse) document.getElementById("chatNotification").style.display = "block";
+  }
+
+  function renderChat() {
+    const chatBox = document.getElementById("chatBox");
+    const log = JSON.parse(localStorage.getItem("chatLog")) || [];
+    chatBox.innerHTML = log.map(msg => `<div class="chat-msg ${msg.sender}"><strong>${msg.sender === 'admin' ? 'Admin' : msg.name}:</strong> ${msg.message}</div>`).join("");
+  }
+</script>
+</body>
+</html>

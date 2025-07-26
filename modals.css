@@ -1,0 +1,176 @@
+/* === Global Styles === */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f7f8fa;
+  margin: 0;
+  padding: 0;
+}
+
+a, button {
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+button {
+  padding: 10px 18px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #45a049;
+}
+
+/* === Input Fields === */
+input[type="text"], input[type="email"], input[type="password"], input[type="tel"], input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+/* === Modal Common === */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  padding: 20px;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 5% auto;
+  padding: 25px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.modal-header {
+  font-size: 1.4em;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.close-btn {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 1.5em;
+  background: none;
+  border: none;
+  color: #555;
+}
+
+.close-btn:hover {
+  color: #000;
+}
+
+/* === Dropdown === */
+.account-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: white;
+  min-width: 180px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  z-index: 1001;
+  padding: 10px 0;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 10px 16px;
+  color: #333;
+  transition: background 0.2s ease;
+}
+
+.dropdown-menu a:hover {
+  background: #f2f2f2;
+}
+
+/* === Orders === */
+.order {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  background-color: #fdfdfd;
+}
+
+/* === Product Card (Optional) === */
+.product-card {
+  border: 1px solid #e3e3e3;
+  border-radius: 10px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  transition: transform 0.2s;
+}
+
+.product-card:hover {
+  transform: scale(1.02);
+}
+
+.product-card img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.product-card-content {
+  padding: 12px;
+}
+
+/* === Chat Modal === */
+#chatModal .modal-content {
+  max-width: 400px;
+}
+
+#chatInput {
+  height: 60px;
+  resize: none;
+}
+
+/* === Password Reset Section === */
+#newPasswordSection {
+  display: none;
+  margin-top: 15px;
+}
+
+/* === Utility === */
+.hidden {
+  display: none !important;
+}
