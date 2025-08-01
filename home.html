@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" >
   <title>3D E-Commerce Site</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -184,12 +184,13 @@ footer.bottom-nav {
 }
 
 /* Wishlist Button */
-.wishlist-btn {
-  background-color: #e6005c;
-  margin-left: 10px;
-  margin-top; 0px;
-}
 
+wishlist-btn {  
+  background-color: #e6005c;  
+  margin-left: 10px;  
+  margin-top: 0px;  
+}  
+  
 .wishlist-btn:hover {
   background-color: #cc0052;
 }
@@ -483,7 +484,7 @@ header {
   text-align: center;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1700px) {
   .card { flex: 0 0 calc(100% / 5 - 16px); }
 }
 @media (max-width: 992px) {
@@ -584,7 +585,7 @@ header {
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 1200px) {
   .products-section {
     grid-template-columns: 1fr;
   }
@@ -596,6 +597,136 @@ header {
   .product-item img {
     width: 100%;
     height: auto;
+  }
+
+@media (max-width: 768px) {
+  .products-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* 3 per row if space allows */
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .product, .single-product {
+    height: auto;
+    padding: 10px;
+  }
+
+  .product-item img {
+    width: 100%;
+    height: auto;
+  }
+
+  .carousel-container,
+  .carousel-track {
+    flex-direction: column;
+    overflow-x: visible;
+    scroll-snap-type: none;
+  }
+
+  .carousel-track {
+    gap: 20px;
+  }
+
+  .card {
+    flex: 1 1 100%;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .card img {
+    height: auto;
+  }
+
+
+/* Further reduce to 2 per row if really narrow */
+@media (max-width: 480px) {
+  .products-section {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Still responsive but usable */
+  }
+/* Layout container */
+.layout.d-flex {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+/* Vertical nav setup */
+.vertical-nav {
+  width: 250px;
+  flex-shrink: 0;
+  background-color: #f8f8f8;
+}
+
+/* Main content area */
+.content {
+  flex-grow: 1;
+  padding: 16px;
+  width: 100%;
+}
+
+/* Product grid section */
+.products-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Individual product card */
+.product-item {
+  border: 1px solid #e0e0e0;
+  padding: 10px;
+  background: #fff;
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.product-item img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Carousel styles */
+.carousel-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 16px;
+}
+
+.card {
+  flex: 0 0 250px;
+  scroll-snap-align: start;
+  background-color: #f1f1f1;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+/* RESPONSIVE ADJUSTMENTS */
+@media (max-width: 768px) {
+  .layout.d-flex {
+    flex-direction: column;
+  }
+
+  .vertical-nav {
+    width: 100%;
+    order: -1;
+  }
+
+  .carousel-track {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .card {
+    flex: 0 0 80%;
   }
 }
   </style>
@@ -624,7 +755,7 @@ header {
         <option>Electronics</option>
         <option>Books</option>
       </select>
-      <input type="text" placeholder="Search products..." />
+<input type="text" placeholder="Search products...">
       <button>Search</button>
     </div>  <!-- Wishlist Toggle Button -->
   <button class="wishlist-toggle" onclick="toggleWishlist()">Wishlist</button>
@@ -993,7 +1124,7 @@ header {
       </div>
       <div class="product-item" onclick="redirectToCategory('Electronics')">
         <img src="e3.jpg" alt="Jacket">
-        <p><h4>Jackets</h4></p>
+        <p>Jackets</p>
       </div>
     </div>
   </div>
@@ -1003,7 +1134,7 @@ header {
     <img src="home7.jpg" alt="Big Banner">
     <div class="single-product-info">
       <h2>Special Offer</h2>
-      <p><h3>Up to 50% off on selected items</h3></p>
+      <p>Up to 50% off on selected items</p>
     </div>
   </div>
 
@@ -1290,7 +1421,7 @@ header {
     function redirectToCategory(category) {
       
     // Redirect to eShop.html with category as query parameter
-    window.location.href = `eShop.html?category=${encodeURIComponent(category)}`;
+    window.location.href = `index.html?category=${encodeURIComponent(category)}`;
   }
 
   const carousel = document.querySelector('.carousel');
